@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>randomSorter</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to the random list sorter</h1>
+        <p>Upload a list to start</p>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <h3 class="text-center">The List</h3>
+                {% for user in data["sortedList"] %}
+                <button id="{{ loop.index0 }}" class="btn btn-primary border rounded d-flex d-xl-flex flex-grow-1 flex-shrink-1 flex-fill justify-content-center align-items-center align-content-center m-auto justify-content-xl-center" type="button" style="max-width: 100%;width: 100%;">{{ user }}<br></button>
+                {% endfor %}
+                {% if data["dataAvailable"] == true %}
+                    <a href='/raw-{{ data["rawData"] }}' target="_blank" class="btn btn-dark border rounded d-flex d-xl-flex flex-grow-1 flex-shrink-1 flex-fill justify-content-center align-items-center align-content-center m-auto justify-content-xl-center" type="button" style="max-width: 100%;width: 100%;">View Raw</a>
+                {% endif %}
+            </div>
+            <div class="col">
+                {{data["pathAvailable"]}}
+                <form method="post" enctype=multipart/form-data>
+                    {% if data["pathAvailable"] == false %}
+                    <h2 class="text-center">Upload</h2><input name="file" class="bg-primary border rounded-0 border-primary form-control-lg d-flex d-xl-flex flex-grow-1 flex-shrink-1 flex-fill align-content-center align-self-center m-auto justify-content-xl-center align-items-xl-center" type="file" style="width: 80%;height: 32px;">
+                    {% endif %}
+                    <h1 class="text-center">Extract</h1><button class="btn btn-primary border rounded d-flex d-xl-flex flex-grow-1 flex-shrink-1 flex-fill justify-content-center align-items-center align-content-center m-auto justify-content-xl-center" type="submit" style="max-width: 100%;width: 100%;height: 100px;">EXTRACT</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+</body>
+</html>
