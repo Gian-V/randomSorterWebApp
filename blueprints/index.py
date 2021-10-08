@@ -39,35 +39,42 @@ def display_index():
             if f.filename == '':
                 response_data["error"] = "No file provided"
 
+            # if not, saving the file locally and add a cookie to keep the file information
+            # TODO: File elimination scheduler
             else:
                 path = os.path.join(current_app.config['UPLOAD_FOLDER'], secure_filename(str(uuid4())))
                 f.save(path)
-                session["file"] = path
                 response_data["pathAvailable"] = True
-        else:
-            response_data["pathAvailable"] = True
-            path = session["file"]
 
         if path is not None:
+
             with open(path, 'r', encoding="UTF-8") as file:
                 names = file.readlines()
                 shuffle(names)
+
+                # some string formatting
                 for name in range(0, len(names)):
                     names[name] = f"{name + 1} - {names[name]}"
+                for name in names:
+                    response_data["rawData"] = response_data["rawData"] + name + "<br>"
+
+                # response assignments
                 response_data["dataAvailable"] = True
                 response_data["sortedList"] = names
                 response_data["jsParsedSorterList"] = json.dumps(names)
                 response_data["listLen"] = len(names)
-                for name in names:
-                    response_data["rawData"] = response_data["rawData"] + name + "<br>"
+
+                # do I have to save the extraction?
                 if bool(request.form.getlist("record")):
                     uuid = session["uuid"]
                     response_data["recordUUID"] = uuid
+
+                    # TODO: database folder with all database-related functions
                     db = get_db()
                     db.execute(f"INSERT INTO extractions ('uuid', 'raw', 'timestamp') VALUES(?,?,?)",
                                (str(uuid), response_data['rawData'], str(datetime.now())))
                     db.commit()
-                    session["uuid"] = uuid4()
+
     else:
         session["uuid"] = uuid4()
         response_data["recordUUID"] = session["uuid"]

@@ -26,7 +26,7 @@
                     <button class="btn btn-primary border rounded d-flex d-xl-flex justify-content-xl-center" type="button" style="max-width: 100%;width: 100%;">{{ user }}<br></button>
                 {% endfor %}
                 {% if data["dataAvailable"] == true %}
-                    <button class="btn btn-dark border rounded d-flex d-xl-flex justify-content-xl-center" type="button" style="max-width: 100%;width: 100%;margin-top: 10px;">View Raw</button>
+                    <a href="/raw-{{ data['rawData'] }}" target="_blank" ><button class="btn btn-dark border rounded d-flex d-xl-flex justify-content-xl-center" type="button" style="max-width: 100%;width: 100%;margin-top: 10px;">View Raw</button></a>
                 {% endif %}
             </div>
             <div class="col">
@@ -36,7 +36,7 @@
                         <div class="form-check" style="margin-top: 10px;"><input class="form-check-input" name="record" type="checkbox" id="formCheck-1"><label class="form-check-label" for="formCheck-1">Record extraction</label></div>
                     {% endif %}
                     {% if data["recordUUID"] is not none %}
-                    <p><strong>The unique ID for this extraction is: </strong>{{ data["recordUUID"] }}<br>Lookup Page: <a href="/dbLookup-{{ data['recordUUID'] }}">Link</a></p>
+                    <p><strong>The unique ID for this extraction is: </strong>{{ data["recordUUID"] }}<br>Lookup Page: <a target="_blank" href="/dbLookup-{{ data['recordUUID'] }}">Link</a></p>
                     {% endif %}
                         <h1 class="text-center">Extract</h1>
                     {% if data["pathAvailable"] == false %}

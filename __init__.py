@@ -9,7 +9,7 @@ def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
 
     app.config['DATABASE'] = os.path.join(app.instance_path, '../instance/db.sqlite')
-    app.config['UPLOAD_FOLDER'] = "./randomSorterWebApp/lists/"
+    app.config['UPLOAD_FOLDER'] = os.path.join(app.instance_path, '../instance/lists/')
     app.config['MAX_CONTENT_PATH'] = 1048576
     app.secret_key = 'super secret key'
     app.config['SESSION_TYPE'] = 'filesystem'
