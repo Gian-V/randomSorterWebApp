@@ -10,10 +10,13 @@ from uuid import uuid4
 from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
 from random import shuffle
-from datetime import datetime
+from datetime import datetime, timedelta
+from apscheduler.schedulers.background import BackgroundScheduler
 
 bp = Blueprint('index', __name__)
 
+scheduler = BackgroundScheduler()
+scheduler.start()
 
 @bp.route('/', methods=("GET", "POST"))
 def display_index():
@@ -44,6 +47,8 @@ def display_index():
             else:
                 path = os.path.join(current_app.config['UPLOAD_FOLDER'], secure_filename(str(uuid4())))
                 f.save(path)
+                print(path)
+                scheduler.add_job(remove, 'cron', minute=10, end_date=datetime.now() + timedelta(minutes=11), args=[path, ])
                 response_data["pathAvailable"] = True
 
         if path is not None:
@@ -92,3 +97,7 @@ def display_db_lookup(uuid):
     data = get_db().execute("SELECT raw, timestamp FROM extractions WHERE uuid=?", (uuid,)).fetchone()
     print(data)
     return "UUID: " + uuid + "<br><br>" + data["raw"] + "<br><br>" + "TIMESTAMP: " + data["timestamp"]
+
+def remove(path):
+    print("AAAA")
+    os.remove(path)
